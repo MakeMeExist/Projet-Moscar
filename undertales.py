@@ -7,25 +7,6 @@ import pygame
 walls = []
 
 
-class Missile:
-    def __init__(self, rec):
-        self.rect = rec
-
-    def move(self, dx, dy):
-        if dx != 0:
-            self.move_single_axis(dx, 0)
-        if dy != 0:
-            self.move_single_axis(0, dy)
-
-    def move_single_axis(self, dx, dy):
-
-        self.rect.x += dx
-        self.rect.y += dy
-
-    def tirs(self,n):
-        
-
-
 # Class for the orange dude
 class Player(object):
 
@@ -65,3 +46,36 @@ class Wall(object):
     def __init__(self, pos):
         walls.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 6, 6)
+
+
+class Missile(pygame.sprite.Sprite):
+    def __init__(self, rec):
+        self.rect = rec
+
+    def move(self, dx, dy):
+        if dx != 0:
+            self.move_single_axis(dx, 0)
+        if dy != 0:
+            self.move_single_axis(0, dy)
+
+    def move_single_axis(self, dx, dy):
+
+        self.rect.x += dx
+        self.rect.y += dy
+
+    # def tirs(self,n):
+#     def __init__(self):
+#         super().__init__()
+#         self.velocity = 5
+#         self.image = pygame.image.load("image.png")
+#         self.rect = self.image.get_rect()
+#         self.image = pygame.transform.scale(self.image, (50, 50))
+#
+#
+# class Combat:
+#     def __init__(self):
+#         self.niveau = 1
+#         self.all_missile = pygame.sprite.Group()
+#
+#     def generation_missile(self):
+#         self.all_missile.add(Missile())
