@@ -100,7 +100,6 @@ for row in map:
 
 running = True
 while running:
-
     clock.tick(60)
     time += 1
     if time % 60 == 0:
@@ -143,9 +142,9 @@ while running:
         player.move(0, 3)
     # ----------------------------------------------------------------------------------------------------------------------------------------
     for i in range(len(missile)):
-
-        direction_move_x = int(direc[i][0])
-        direction_move_y = int(direc[i][1])
+        
+        direction_move_x = direc[i][0]
+        direction_move_y = direc[i][1]
         # if missile[i].rect.y == 0:
         #     direction_move_y = missile[i].y
         # if missile[i].rect.x == 0:
@@ -161,10 +160,11 @@ while running:
             raise SystemExit
         missile[i].depart += 1
         if missile[i].depart > 60:
-            missile = missile[:i] + missile[i + 1:]
             direc = direc[:i] + direc[i + 1:]
-    print(missile, len(missile))
-    print(direc, len(direc))
+            missile = missile[:i] + missile[i + 1:]
+
+    print( "missile",len(missile))
+    print( "direc",len(direc))
     # ----------------------------------------------------------------------------------------------------------------------------------------
     # if player.rect.colliderect(end_rect):
     #     raise SystemExit
