@@ -4,7 +4,7 @@ import os
 import random
 import pygame
 import timeOT
-from undertales import *
+from moscar_class import *
 from random import randint
 from time import sleep
 
@@ -113,7 +113,7 @@ while running:
         for i in range(min + 1):
             av = randint(0, len(spawn) - 1)
             b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
-            new_missile.append(Missile(b, spawn[av].x, spawn[av].y,time))
+            new_missile.append(Missile(b, spawn[av].x, spawn[av].y, time))
         for i in range(len(new_missile)):
             n = player.rect.x // 100 - new_missile[i].rect.x // 100
             v = player.rect.y // 100 - new_missile[i].rect.y // 100
@@ -162,9 +162,9 @@ while running:
         missile[i].depart += 1
         if missile[i].depart > 60:
             missile = missile[:i] + missile[i + 1:]
-            direc = direc[:i] + direc[i+1:]
-    print(missile,len(missile))
-    print(direc,len(direc))
+            direc = direc[:i] + direc[i + 1:]
+    print(missile, len(missile))
+    print(direc, len(direc))
     # ----------------------------------------------------------------------------------------------------------------------------------------
     # if player.rect.colliderect(end_rect):
     #     raise SystemExit
