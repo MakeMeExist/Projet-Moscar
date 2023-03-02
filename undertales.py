@@ -3,15 +3,21 @@
 import os
 import random
 import pygame
+from math import sqrt
+from math import ceil
 
 walls = []
+
+
+def norm(x, y) -> float:
+    return sqrt(x ** 2 + y ** 2)
 
 
 # Class for the orange dude
 class Player(object):
 
     def __init__(self):
-        self.rect = pygame.Rect(32, 32, 16, 16)
+        self.rect = pygame.Rect(256, 106, 16, 16)
 
     def move(self, dx, dy):
 
@@ -48,22 +54,39 @@ class Wall(object):
         self.rect = pygame.Rect(pos[0], pos[1], 6, 6)
 
 
-class Missile(pygame.sprite.Sprite):
-    def __init__(self, rec):
+class Missile:
+    def __init__(self, rec, x_def, y_def, naissance):
         self.rect = rec
+        self.x = x_def
+        self.y = y_def
+        self.depart = naissance
 
     def move(self, dx, dy):
+
         if dx != 0:
             self.move_single_axis(dx, 0)
+        else:
+            self.move_single_axis(self.x, 0)
         if dy != 0:
             self.move_single_axis(0, dy)
+        else:
+            self.move_single_axis(self.y, 0)
 
     def move_single_axis(self, dx, dy):
 
         self.rect.x += dx
         self.rect.y += dy
 
-    # def tirs(self,n):
+    def direction(self, x, y):
+        a = self.rect.x
+        b = self.rect.y
+        return [x - a, y - b]
+
+    # def suppression:
+    #     if
+
+
+# def tirs(self,n):
 #     def __init__(self):
 #         super().__init__()
 #         self.velocity = 5
@@ -79,3 +102,12 @@ class Missile(pygame.sprite.Sprite):
 #
 #     def generation_missile(self):
 #         self.all_missile.add(Missile())
+
+
+class Spawn:
+    def __init__(self, rec, x_def, y_def):
+        self.rect = rec
+        self.x = rec.x
+        self.y = rec.y
+        self.x = x_def
+        self.y = y_def
