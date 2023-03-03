@@ -41,6 +41,7 @@ for i in range(15):
 missile = []
 new_missile = []
 direc = []
+suppr = []
 # for i in range(1):
 #     a = randint(0, len(spawn) - 1)
 #     b = pygame.Rect(spawn[a].rect.x, spawn[a].rect.y, 6, 6)
@@ -108,7 +109,7 @@ while running:
     if seconde // 60 == 1:
         min += 1
         seconde = 0
-    if time % 600 == 0:
+    if time % 30 == 0:
         for i in range(min + 1):
             av = randint(0, len(spawn) - 1)
             b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
@@ -142,7 +143,7 @@ while running:
         player.move(0, 3)
     # ----------------------------------------------------------------------------------------------------------------------------------------
     for i in range(len(missile)):
-        
+
         direction_move_x = direc[i][0]
         direction_move_y = direc[i][1]
         # if missile[i].rect.y == 0:
@@ -159,12 +160,20 @@ while running:
             print("dead")
             raise SystemExit
         missile[i].depart += 1
-        if missile[i].depart > 60:
-            direc = direc[:i] + direc[i + 1:]
-            missile = missile[:i] + missile[i + 1:]
+        if missile[i].depart > 600:
+            suppr.append(i)
+            # direc = direc[:i] + direc[i + 1:]
+            # missile = missile[:i] + missile[i + 1:]
 
-    print( "missile",len(missile))
-    print( "direc",len(direc))
+    for i in suppr:  # despawn
+        for j in range(len(missile)):
+            if i == j:
+                direc = direc[:i] + direc[i + 1:]
+                missile = missile[:i] + missile[i + 1:]
+    suppr = []
+
+    print("missile", len(missile))
+    print("direc", len(direc))
     # ----------------------------------------------------------------------------------------------------------------------------------------
     # if player.rect.colliderect(end_rect):
     #     raise SystemExit
