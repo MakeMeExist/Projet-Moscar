@@ -47,8 +47,8 @@ direc = []
 #     missile.append(Missile(b))
 #
 # for i in range(len(missile)):
-#     n = player.rect.x / 100 -missile[i].rect.x / 100
-#     v = player.rect.y / 100 - missile[i].rect.y / 100
+#     n = (player.rect.x - missile[i].rect.x) / 100
+#     v = (player.rect.y - missile[i].rect.y) / 100
 #     a = [n, v]
 #     direc.append(a)
 # ----------------------------------------------------------------------------------------------------------------------------------------
