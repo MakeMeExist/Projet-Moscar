@@ -33,11 +33,11 @@ clock = pygame.time.Clock()
 # ----------------------------------------------------------------------------------------------------------------------------------------
 spawn = []
 for i in range(17):
-    spawn.append(Spawn(pygame.Rect(32 * i + 32, 32, 6, 6), -3, 3))
+    spawn.append(Spawn(pygame.Rect(32 * (i+1) + 0, 0, 6, 6), -3, 3))
 for i in range(15):
     spawn.append(Spawn(pygame.Rect(32, 32 * i + 32, 6, 6), - 1, 1))
 for i in range(17):
-    spawn.append(Spawn(pygame.Rect(32 * i + 32, 32 + 13 * 32, 6, 6), - 1, 1))
+    spawn.append(Spawn(pygame.Rect(32 * (i+1) + 0, 64 + 13 * 32, 6, 6), - 1, 1))
 for i in range(15):
     spawn.append(Spawn(pygame.Rect(32 + 16 * 32, 32 * i + 32, 6, 6), - 1, 1))
 # ----------------------------------------------------------------------------------------------------------------------------------------
