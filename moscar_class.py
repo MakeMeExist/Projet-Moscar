@@ -55,7 +55,7 @@ class Wall(object):
 
 
 class Missile:
-    def __init__(self, rec, x_def, y_def, naissance):
+    def __init__(self, rec, x_def, y_def, naissance=999999999999):
         self.rect = rec
         self.x = x_def
         self.y = y_def
@@ -107,7 +107,5 @@ class Missile:
 class Spawn:
     def __init__(self, rec, x_def, y_def):
         self.rect = rec
-        self.x = rec.x
-        self.y = rec.y
         self.x = x_def
         self.y = y_def
