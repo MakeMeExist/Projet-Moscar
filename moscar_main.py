@@ -33,11 +33,11 @@ clock = pygame.time.Clock()
 # ----------------------------------------------------------------------------------------------------------------------------------------
 spawn = []
 for i in range(17):
-    spawn.append(Spawn(pygame.Rect(32 * (i+1) + 0, 0, 6, 6), -3, 3))
+    spawn.append(Spawn(pygame.Rect(32 * (i + 1) + 0, 0, 6, 6), -3, 3))
 for i in range(15):
     spawn.append(Spawn(pygame.Rect(32, 32 * i + 32, 6, 6), - 1, 1))
 for i in range(17):
-    spawn.append(Spawn(pygame.Rect(32 * (i+1) + 0, 64 + 13 * 32, 6, 6), - 1, 1))
+    spawn.append(Spawn(pygame.Rect(32 * (i + 1) + 0, 64 + 13 * 32, 6, 6), - 1, 1))
 for i in range(15):
     spawn.append(Spawn(pygame.Rect(32 + 16 * 32, 32 * i + 32, 6, 6), - 1, 1))
 # ----------------------------------------------------------------------------------------------------------------------------------------
@@ -75,18 +75,18 @@ while running:
     if seconde // 2 == 1:
         min += 1
         seconde = 0
-    if time % 60 == 0:
-        for i in range(min + 1):
-            av = randint(0, len(spawn) - 1)
-            b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
-            new_missile.append(Missile(b, spawn[av].x, spawn[av].y, time))
-        for i in range(len(new_missile)):
-            n = player.rect.x // 100 - new_missile[i].rect.x // 100
-            v = player.rect.y // 100 - new_missile[i].rect.y // 100
-            a = [n, v]
-            direc.append(a)
-        missile += new_missile
-        new_missile = []
+    # if time % 60 == 0:
+    #     for i in range(min + 1):
+    #         av = randint(0, len(spawn) - 1)
+    #         b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
+    #         new_missile.append(Missile(b, spawn[av].x, spawn[av].y, time))
+    #     for i in range(len(new_missile)):
+    #         n = player.rect.x // 100 - new_missile[i].rect.x // 100
+    #         v = player.rect.y // 100 - new_missile[i].rect.y // 100
+    #         a = [n, v]
+    #         direc.append(a)
+    #     missile += new_missile
+    #     new_missile = []
     print(min)
 
     # ----------------------------------------------------------------------------------------------------------------------------------------
@@ -97,26 +97,26 @@ while running:
             running = False
     # Move the player if an arrow key is pressed
     process_keyboard()
-# ----------------------------------------------------------------------------------------------------------------------------------------
-    # for i in range(len(missile)):
-    #     direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] + 100
-    #     direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] + 100
-        #
-        #       mode interessant
-        # for i in range(len(missile)):
-        #     direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
-        #     direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
-
-        # je de base
+    # ----------------------------------------------------------------------------------------------------------------------------------------
     for i in range(len(missile)):
-        direction_move_x = direc[i][0]
-        direction_move_y = direc[i][1]
-        # if missile[i].rect.y == 0:
-        #     direction_move_y = missile[i].y
-        # if missile[i].rect.x == 0:
-        #     direction_move_y = missile[i].x
-        if missile[i].rect.x == 0 or missile[i].rect.x <= 1:
-            direction_move_y, missile[i].rect.x = missile[i].y, missile[i].x
+        direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] + 100
+        direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] + 100
+    #
+    #       mode interessant
+    # for i in range(len(missile)):
+    #     direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
+    #     direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
+
+    # je de base
+    # for i in range(len(missile)):
+    #     direction_move_x = direc[i][0]
+    #     direction_move_y = direc[i][1]
+    #     # if missile[i].rect.y == 0:
+    #     #     direction_move_y = missile[i].y
+    #     # if missile[i].rect.x == 0:
+    #     #     direction_move_y = missile[i].x
+    #     if missile[i].rect.x == 0 or missile[i].rect.x <= 1:
+    #         direction_move_y, missile[i].rect.x = missile[i].y, missile[i].x
 
         missile[i].move(direction_move_x, direction_move_y)
 
@@ -125,7 +125,7 @@ while running:
             print("dead")
             raise SystemExit
         missile[i].depart += 1
-        if missile[i].depart > 300:
+        if missile[i].depart > 6600:
             suppr.append(i)
             # direc = direc[:i] + direc[i + 1:]
             # missile = missile[:i] + missile[i + 1:]
