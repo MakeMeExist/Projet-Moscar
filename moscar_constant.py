@@ -1,37 +1,38 @@
 import pygame
 from moscar_class import *
+
 player = Player()
 pygame.display.set_caption("MOSCARLAND")
 screen = pygame.display.set_mode((640, 480))
 
 mape = ["",
-       "",
-       "",
-       "",
-       "       WWWWWWWWWWWWWWWWWWWWWWW",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       WWWWWWWWWWWWWWWWWWWWWWW",
-       ]
+        "",
+        "",
+        "",
+        "       WWWWWWWWWWWWWWWWWWWWWWW",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       W                     W",
+        "       WWWWWWWWWWWWWWWWWWWWWWW",
+        ]
 
 
 def map_create(map: list):
@@ -58,6 +59,7 @@ def draw_cube(walls, spawn, missile):
         pygame.draw.rect(screen, (64, 224, 208), spawn[i])
     for i in range(len(missile)):
         pygame.draw.rect(screen, (22, 225, 55), missile[i])
+
 
 def process_keyboard():
     key = pygame.key.get_pressed()

@@ -71,7 +71,7 @@ while running:
     if time % 60 == 0:
         seconde += 1
         time = 0
-    if seconde // 60 == 1:
+    if seconde // 2 == 1:
         min += 1
         seconde = 0
     if time % 30 == 0:
@@ -97,19 +97,21 @@ while running:
     # Move the player if an arrow key is pressed
     process_keyboard()
     # ----------------------------------------------------------------------------------------------------------------------------------------
-    for i in range(len(missile)):
-        direction_move_x = direc[i][0]
-        # direction_move_y = d
 
     for i in range(len(missile)):
-        direction_move_x = direc[i][0]
-        direction_move_y = direc[i][1]
-        # if missile[i].rect.y == 0:
-        #     direction_move_y = missile[i].y
-        # if missile[i].rect.x == 0:
-        #     direction_move_y = missile[i].x
-        if missile[i].rect.x == 0 or missile[i].rect.x <= 1:
-            direction_move_y, missile[i].rect.x = missile[i].y, missile[i].x
+        direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0]/50
+
+        direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0]/50
+
+        # for i in range(len(missile)):
+        #     direction_move_x = direc[i][0]
+        #     direction_move_y = direc[i][1]
+        #     # if missile[i].rect.y == 0:
+        #     #     direction_move_y = missile[i].y
+        #     # if missile[i].rect.x == 0:
+        #     #     direction_move_y = missile[i].x
+        #     if missile[i].rect.x == 0 or missile[i].rect.x <= 1:
+        #         direction_move_y, missile[i].rect.x = missile[i].y, missile[i].x
 
         missile[i].move(direction_move_x, direction_move_y)
 
@@ -118,7 +120,7 @@ while running:
             print("dead")
             raise SystemExit
         missile[i].depart += 1
-        if missile[i].depart > 600:
+        if missile[i].depart > 300:
             suppr.append(i)
             # direc = direc[:i] + direc[i + 1:]
             # missile = missile[:i] + missile[i + 1:]
