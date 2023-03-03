@@ -3,7 +3,7 @@ from moscar_class import *
 
 player = Player()
 pygame.display.set_caption("MOSCARLAND")
-screen = pygame.display.set_mode((640, 480))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 mape = ["",
         "",
