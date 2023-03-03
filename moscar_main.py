@@ -4,24 +4,27 @@ import os
 import random
 import pygame
 import timeOT
+from moscar_constant import map_create
 from moscar_class import *
 from random import randint
 from time import sleep
+from moscar_constant import *
 
 time = 0
 seconde = 0
 min = 0
+
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 pygame.init()
 
 # Set up the display
-pygame.display.set_caption("MOSCARLAND")
-screen = pygame.display.set_mode((640, 480))
+# pygame.display.set_caption("MOSCARLAND")
+# screen = pygame.display.set_mode((640, 480))
 # Combat.all_missile.draw(screen)
 clock = pygame.time.Clock()
 # List to hold the walls
-player = Player()  # Create the player
+# player = Player()  # Create the player
 
 # ----------------------------------------------------------------------------------------------------------------------------------------
 # missile = []
@@ -58,46 +61,8 @@ suppr = []
 
 # Holds the level layout in a list of strings.
 
-
+map_create(mape)
 # Parse the level string above. W = wall, E = exit
-map = ["",
-       "",
-       "",
-       "",
-       "       WWWWWWWWWWWWWWWWWWWWWWW",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       W                     W",
-       "       WWWWWWWWWWWWWWWWWWWWWWW",
-       ]
-x = y = 0
-for row in map:
-    for col in row:
-        if col == "W":
-            Wall((x, y))
-        if col == "E":
-            end_rect = pygame.Rect(x, y, 16, 16)
-        x += 16
-    y += 16
-    x = 0
 
 running = True
 while running:
@@ -117,33 +82,26 @@ while running:
         for i in range(len(new_missile)):
             n = player.rect.x // 100 - new_missile[i].rect.x // 100
             v = player.rect.y // 100 - new_missile[i].rect.y // 100
-
             a = [n, v]
             direc.append(a)
-
         missile += new_missile
         new_missile = []
     # print(min)
 
+    # ----------------------------------------------------------------------------------------------------------------------------------------
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             running = False
-
     # Move the player if an arrow key is pressed
-    key = pygame.key.get_pressed()
-    if key[pygame.K_LEFT]:
-        player.move(-3, 0)
-    if key[pygame.K_RIGHT]:
-        player.move(3, 0)
-    if key[pygame.K_UP]:
-        player.move(0, -3)
-    if key[pygame.K_DOWN]:
-        player.move(0, 3)
+    process_keyboard()
     # ----------------------------------------------------------------------------------------------------------------------------------------
     for i in range(len(missile)):
+        direction_move_x = direc[i][0]
+        # direction_move_y = d
 
+    for i in range(len(missile)):
         direction_move_x = direc[i][0]
         direction_move_y = direc[i][1]
         # if missile[i].rect.y == 0:
@@ -180,14 +138,6 @@ while running:
     # mis.move(1,0)
     # Draw the scene
     screen.fill((0, 0, 0))
-    for wall in walls:
-        pygame.draw.rect(screen, (255, 255, 255), wall.rect)
-    # pygame.draw.rect(screen, (255, 0, 0), end_rect)
-    pygame.draw.rect(screen, (255, 200, 0), player.rect)
+    draw_cube(walls, spawn, missile)
 
-    # pygame.draw.rect(screen, (22, 225, 55), mis)
-    for i in range(len(spawn)):
-        pygame.draw.rect(screen, (64, 224, 208), spawn[i])
-    for i in range(len(missile)):
-        pygame.draw.rect(screen, (22, 225, 55), missile[i])
     pygame.display.flip()
