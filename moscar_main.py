@@ -42,20 +42,22 @@ for i in range(15):
     spawn.append(Spawn(pygame.Rect(32 + 16 * 32, 32 * i + 32, 6, 6), - 1, 1))
 # ----------------------------------------------------------------------------------------------------------------------------------------
 missile = []
-new_missile = []
+chercheur = []
 direc = []
-suppr = []
-for i in range(1):
-    for i in range(min + 1):
-        av = randint(0, len(spawn) - 1)
-        b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
-        missile.append(Missile(b, spawn[av].x, spawn[av].y, time))
-
-for i in range(len(missile)):
-    n = (player.rect.x - missile[i].rect.x) / 100
-    v = (player.rect.y - missile[i].rect.y) / 100
-    a = [n, v]
-    direc.append(a)
+suppr_missile = []
+suppr_chercheur = []
+mis = Missile(pygame.Rect(32, 62, 32, 32), 2, 2)
+# for i in range(1):
+#     for i in range(min + 1):
+#         av = randint(0, len(spawn) - 1)
+#         b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
+#         missile.append(Missile(b, spawn[av].x, spawn[av].y, time))
+#
+# for i in range(len(missile)):
+#     n = (player.rect.x - missile[i].rect.x) / 100
+#     v = (player.rect.y - missile[i].rect.y) / 100
+#     a = [n, v]
+#     direc.append(a)
 # ----------------------------------------------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------------------------------------------
@@ -66,27 +68,17 @@ map_create(mape)
 # Parse the level string above. W = wall, E = exit
 
 running = True
+
 while running:
     clock.tick(60)
     time += 1
     if time % 60 == 0:
         seconde += 1
-        time = 0
-    if seconde // 2 == 1:
+    if seconde // 20 == 1:
         min += 1
         seconde = 0
-    # if time % 60 == 0:
-    #     for i in range(min + 1):
-    #         av = randint(0, len(spawn) - 1)
-    #         b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
-    #         new_missile.append(Missile(b, spawn[av].x, spawn[av].y, time))
-    #     for i in range(len(new_missile)):
-    #         n = player.rect.x // 100 - new_missile[i].rect.x // 100
-    #         v = player.rect.y // 100 - new_missile[i].rect.y // 100
-    #         a = [n, v]
-    #         direc.append(a)
-    #     missile += new_missile
-    #     new_missile = []
+    création_chercheur(time, min, chercheur, spawn)
+    création_missile(time, min, missile, spawn, direc)
     print(min)
 
     # ----------------------------------------------------------------------------------------------------------------------------------------
@@ -98,25 +90,36 @@ while running:
     # Move the player if an arrow key is pressed
     process_keyboard()
     # ----------------------------------------------------------------------------------------------------------------------------------------
-    for i in range(len(missile)):
-        direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] + 100
-        direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] + 100
-    #
-    #       mode interessant
-    # for i in range(len(missile)):
-    #     direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
-    #     direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
+    for i in range(len(chercheur)):
+        chercheur[i].direction2(player.rect.x, player.rect.y)
+        if player.rect.colliderect(chercheur[i]):
+            print("dead")
+            raise SystemExit
+        chercheur[i].vie += 1
+        if chercheur[i].vie > 400:
+            suppr_chercheur.append(i)
 
-    # je de base
-    # for i in range(len(missile)):
-    #     direction_move_x = direc[i][0]
-    #     direction_move_y = direc[i][1]
-    #     # if missile[i].rect.y == 0:
-    #     #     direction_move_y = missile[i].y
-    #     # if missile[i].rect.x == 0:
-    #     #     direction_move_y = missile[i].x
-    #     if missile[i].rect.x == 0 or missile[i].rect.x <= 1:
-    #         direction_move_y, missile[i].rect.x = missile[i].y, missile[i].x
+
+    for i in range(len(missile)):
+
+        # direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0]
+        # direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0]
+        #
+        #       mode interessant
+        # for i in range(len(missile)):
+        #     direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
+        #     direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
+
+        # je de base
+        # for i in range(len(missile)):
+        direction_move_x = direc[i][0]
+        direction_move_y = direc[i][1]
+        # if missile[i].rect.y == 0:
+        #     direction_move_y = missile[i].y
+        # if missile[i].rect.x == 0:
+        #     direction_move_y = missile[i].x
+        if missile[i].rect.x == 0 or missile[i].rect.x <= 1:
+            direction_move_y, missile[i].rect.x = missile[i].y, missile[i].x
 
         missile[i].move(direction_move_x, direction_move_y)
 
@@ -124,27 +127,33 @@ while running:
         if player.rect.colliderect(missile[i]):
             print("dead")
             raise SystemExit
-        missile[i].depart += 1
-        if missile[i].depart > 6600:
-            suppr.append(i)
-            # direc = direc[:i] + direc[i + 1:]
-            # missile = missile[:i] + missile[i + 1:]
+        missile[i].vie += 1
+        if missile[i].vie > 400:
+            suppr_missile.append(i)
 
-    for i in suppr:  # despawn
+    for i in suppr_missile:  # despawn
         for j in range(len(missile)):
             if i == j:
                 direc = direc[:i] + direc[i + 1:]
                 missile = missile[:i] + missile[i + 1:]
-    suppr = []
+    suppr_missile = []
 
-    print("missile", len(missile))
-    print("direc", len(direc))
+    for i in suppr_chercheur:  # despawn
+        for j in range(len(chercheur)):
+            if i == j:
+                chercheur = chercheur[:i] + chercheur[i + 1:]
+    suppr_chercheur = []
+
+    mis.direction2(player.rect.x, player.rect.y)
+    # mis.move(1, 1)
+    print("chercheur", len(chercheur))
+    # print("direc", len(direc))
     # ----------------------------------------------------------------------------------------------------------------------------------------
     # if player.rect.colliderect(end_rect):
     #     raise SystemExit
-    # mis.move(1,0)
+
     # Draw the scene
     screen.fill((0, 0, 0))
-    draw_cube(walls, spawn, missile)
-
+    draw_cube(walls, spawn, missile,chercheur)
+    # pygame.draw.rect(screen, (22, 225, 55), mis)
     pygame.display.flip()

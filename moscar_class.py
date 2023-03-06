@@ -60,6 +60,8 @@ class Missile:
         self.x = x_def
         self.y = y_def
         self.depart = naissance
+        self.vie = 0
+
 
     def move(self, dx, dy):
 
@@ -81,6 +83,16 @@ class Missile:
         a = self.rect.x
         b = self.rect.y
         return [x - a, y - b]
+
+    def direction2(self, x, y):
+        a = self.rect.x
+        b = self.rect.y
+        vx,vy = 1,1
+        if x < a:
+            vx = -vx
+        if y <b:
+            vy = -vy
+        self.move(vx,vy)
 
     # def suppression:
     #     if
