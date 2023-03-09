@@ -3,7 +3,7 @@
 import os
 import random
 import pygame
-import timeOT
+
 from moscar_constant import map_create
 from moscar_class import *
 from random import randint
@@ -11,6 +11,7 @@ from time import sleep
 from moscar_constant import *
 from math import acos
 from math import sin
+
 time = 0
 seconde = 0
 min = 0
@@ -56,7 +57,7 @@ while running:
         seconde = 0
 
     création_missile3(time, min, missile, spawn, direc)
-    print(len(chercheur))
+    print(len(missile))
 
     # ----------------------------------------------------------------------------------------------------------------------------------------
     for e in pygame.event.get():
@@ -65,13 +66,12 @@ while running:
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             running = False
 
-    process_keyboard()
+    player.update_hero_position()
     # ----------------------------------------------------------------------------------------------------------------------------------------
 
     for i in range(len(missile)):
-
         missile[i].update_enemy_position()
-        if player.rect.colliderect(missile[i]):
+        if missile[i].collision(player):
             print("dead")
             raise SystemExit
         missile[i].vie += 1
@@ -81,7 +81,6 @@ while running:
     for i in suppr_missile:  # despawn
         for j in range(len(missile)):
             if i == j:
-                direc = direc[:i] + direc[i + 1:]
                 missile = missile[:i] + missile[i + 1:]
     suppr_missile = []
 
@@ -93,5 +92,7 @@ while running:
 
     screen.fill((0, 0, 0))
     draw_cube(walls, spawn, missile, chercheur)
-
+    player.blit_hero()
+    for i in range(len(missile)):
+        missile[i].blit_enemy()
     pygame.display.flip()

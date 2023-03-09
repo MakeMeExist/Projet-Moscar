@@ -11,44 +11,77 @@ from math import cos
 from math import sin
 from math import radians
 
+pygame.display.set_caption("MOSCARLAND")
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 walls = []
-
+BLACK = pygame.Color(0, 0, 0)
+RED = pygame.Color(255, 0, 0)
+BLUE = pygame.Color(0, 0, 255)
+# 1440x900
 
 def norm(x, y) -> float:
     return sqrt(x ** 2 + y ** 2)
 
 
-# Class for the orange dude
-class Player(object):
-
+class Hero:
     def __init__(self):
         self.rect = pygame.Rect(256, 106, 16, 16)
+        self.size = 16
+        self.HERO_BMP = pygame.Surface((self.size, self.size))
+        self.HERO_BMP.fill(BLUE)
+        self.HERO_SPEED = 10
+        self.hero_x = 1440 // 2
+        self.hero_y = 900// 2
 
-    def move(self, dx, dy):
+    def update_hero_position(self):
+        new_x, new_y = self.hero_x, self.hero_y
 
-        # Move each axis separately. Note that this checks for collisions both times.
-        if dx != 0:
-            self.move_single_axis(dx, 0)
-        if dy != 0:
-            self.move_single_axis(0, dy)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            new_y = self.hero_y - self.HERO_SPEED
+        elif keys[pygame.K_DOWN]:
+            new_y = self.hero_y + self.HERO_SPEED
+        if keys[pygame.K_LEFT]:
+            new_x = self.hero_x - self.HERO_SPEED
+        elif keys[pygame.K_RIGHT]:
+            new_x = self.hero_x + self.HERO_SPEED
+        self.hero_x, self.hero_y = new_x, new_y
 
-    def move_single_axis(self, dx, dy):
+    def blit_hero(self) -> None:
+        screen.blit(self.HERO_BMP, (self.hero_x - self.size // 2, self.hero_y - self.size // 2))
 
-        # Move the rect
-        self.rect.x += dx
-        self.rect.y += dy
 
-        # If you collide with a wall, move out based on velocity
-        for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                if dx > 0:  # Moving right; Hit the left side of the wall
-                    self.rect.right = wall.rect.left
-                if dx < 0:  # Moving left; Hit the right side of the wall
-                    self.rect.left = wall.rect.right
-                if dy > 0:  # Moving down; Hit the top side of the wall
-                    self.rect.bottom = wall.rect.top
-                if dy < 0:  # Moving up; Hit the bottom side of the wall
-                    self.rect.top = wall.rect.bottom
+# Class for the orange dude
+# class Player(object):
+#
+#     def __init__(self):
+#         self.rect = pygame.Rect(256, 106, 16, 16)
+#
+#     def move(self, dx, dy):
+#
+#         # Move each axis separately. Note that this checks for collisions both times.
+#         if dx != 0:
+#             self.move_single_axis(dx, 0)
+#         if dy != 0:
+#             self.move_single_axis(0, dy)
+#
+#     def move_single_axis(self, dx, dy):
+#
+#         # Move the rect
+#         self.rect.x += dx
+#         self.rect.y += dy
+#
+#         # If you collide with a wall, move out based on velocity
+#         for wall in walls:
+#             if self.rect.colliderect(wall.rect):
+#                 if dx > 0:  # Moving right; Hit the left side of the wall
+#                     self.rect.right = wall.rect.left
+#                 if dx < 0:  # Moving left; Hit the right side of the wall
+#                     self.rect.left = wall.rect.right
+#                 if dy > 0:  # Moving down; Hit the top side of the wall
+#                     self.rect.bottom = wall.rect.top
+#                 if dy < 0:  # Moving up; Hit the bottom side of the wall
+#                     self.rect.top = wall.rect.bottom
 
 
 # Nice class to hold a wall rect
@@ -163,12 +196,13 @@ class Missile:
 #
 #     def generation_missile(self):
 #         self.all_missile.add(Missile())
-class Missile2:
-    def __init__(self, x,y, HER_SPEED=10):
-        self.x = x
-        self.y = y
-        # self.rec = rec
-        self.size = 50
+class Enemy:
+    def __init__(self, rec, HER_SPEED=10):
+        self.rec = rec
+        self.size = 6
+        self.ENEMY_BMP = pygame.Surface((self.size, self.size))
+        self.ENEMY_BMP.fill(RED)
+        self.vie = 0
         self.ENEMY_SPEED = HER_SPEED * 0.8
         self.enemy_x = None
         self.enemy_y = None
@@ -176,8 +210,8 @@ class Missile2:
         self.enemy_vy = None
 
     def direction4(self, her_x, her_y):
-        ex = self.x
-        ey = self.y
+        ex = self.rec.x
+        ey = self.rec.y
         dx = her_x - ex
         dy = her_y - ey
         n = norm(dx, dy)
@@ -193,8 +227,14 @@ class Missile2:
     def update_enemy_position(self):
         self.enemy_x, self.enemy_y = self.enemy_x + self.enemy_vx, self.enemy_y + self.enemy_vy
 
-    def blit_enemy(self, screen) -> None:
-        pygame.draw.rect(screen, (22, 225, 55), self.rec)
+    def blit_enemy(self) -> None:
+        screen.blit(self.ENEMY_BMP, (self.enemy_x - self.size // 2, self.enemy_y - self.size // 2))
+
+    def collision(self, objet):
+        if self.enemy_x - objet.size <= objet.hero_x < self.enemy_x + self.size \
+                and self.enemy_y - objet.size <= objet.hero_y < self.enemy_x + self.size:
+            return True
+        return False
 
 
 class Spawn:

@@ -21,7 +21,7 @@ class Hero:
     def __init__(self):
         self.size = 50
         self.HERO_BMP = pygame.Surface((self.size, self.size))
-        self.HERO_BMP = self.HERO_BMP.fill(BLUE)
+        self.HERO_BMP.fill(BLUE)
         self.HERO_SPEED = 10
         self.hero_x = SCREEN_WIDTH // 2
         self.hero_y = SCREEN_HEIGHT // 2
@@ -46,9 +46,10 @@ class Hero:
 
 class Enemy:
     def __init__(self, HER_SPEED):
-        self.size = 50
+        self.size = 10
         self.ENEMY_BMP = pygame.Surface((self.size, self.size))
-        self.ENEMY_BMP = self.ENEMY_BMP.fill(RED)
+        self.ENEMY_BMP.fill(RED)
+
         self.ENEMY_SPEED = HER_SPEED * 0.8
         self.enemy_x = None
         self.enemy_y = None
@@ -103,15 +104,15 @@ while go_on:
             go_on = False
         if e.type == pygame.KEYDOWN:
             truc.direction4(moi.hero_x, moi.hero_y)
-    if truc.collision(moi) == True:
+    if truc.collision(moi):
         print("You're dead !")
     # hero_x, hero_y = update_hero_position()
     # enemy_x, enemy_y = update_enemy_position()
 
     screen.fill(BLACK)
-    print(type(truc.ENEMY_BMP),type(moi.HERO_BMP))
-    # moi.blit_hero()
-    # truc.blit_enemy()
+
+    moi.blit_hero()
+    truc.blit_enemy()
     pygame.display.update()
     CLOCK.tick(30)
 
