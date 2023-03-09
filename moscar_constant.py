@@ -1,5 +1,5 @@
 import pygame
-from moscar_class import *
+from timeOT import *
 from random import randint
 
 BLACK = pygame.Color(0, 0, 0)
@@ -40,14 +40,12 @@ mape = ["",
         ]
 
 
-def map_create(map: list):
+def map_create2(map: list):
     x = y = 0
     for row in map:
         for col in row:
             if col == "W":
-                Wall((x, y))
-            if col == "E":
-                end_rect = pygame.Rect(x, y, 16, 16)
+                Wall3(x, y)
             x += 16
         y += 16
         x = 0
@@ -56,7 +54,9 @@ def map_create(map: list):
 def draw_cube(walls, spawn, missile, chercheur):
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
     for wall in walls:
-        pygame.draw.rect(screen, (255, 255, 255), wall.rect)
+        walls[wall].blit_wall3()
+        # pygame.draw.rect(screen, (255, 255, 255), wall.rect)
+
     # pygame.draw.rect(screen, (255, 0, 0), end_rect)
 
     for i in range(len(spawn)):
@@ -111,13 +111,13 @@ def création_missile2(time, min, missile, spawn, direc):
 
 def création_missile3(time, min, missile, spawn, direc):
     new_missile = []
-    if time % 60 == 0:
+    if time % 1 == 0:
         for i in range(min + 1):
             av = randint(0, len(spawn) - 1)
             b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
             new_missile.append(Enemy(b))
         for i in range(len(new_missile)):
-            new_missile[i].direction4(player.hero_x, player.hero_y)
+            new_missile[i].direction4(player.x, player.y)
         missile += new_missile
         new_missile = []
 

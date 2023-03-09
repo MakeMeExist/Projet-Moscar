@@ -17,6 +17,8 @@ walls = []
 BLACK = pygame.Color(0, 0, 0)
 RED = pygame.Color(255, 0, 0)
 BLUE = pygame.Color(0, 0, 255)
+
+
 # 1440x900
 
 def norm(x, y) -> float:
@@ -31,7 +33,7 @@ class Hero:
         self.HERO_BMP.fill(BLUE)
         self.HERO_SPEED = 10
         self.hero_x = 1440 // 2
-        self.hero_y = 900// 2
+        self.hero_y = 900 // 2
 
     def update_hero_position(self):
         new_x, new_y = self.hero_x, self.hero_y
@@ -86,10 +88,21 @@ class Hero:
 
 # Nice class to hold a wall rect
 class Wall(object):
-
     def __init__(self, pos):
         walls.append(self)
         self.rect = pygame.Rect(pos[0], pos[1], 6, 6)
+
+
+class Wall3():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.size = 6
+        self.wall_BMP = pygame.Surface((self.size, self.size))
+        self.wall_BMP.fill(0)
+
+    def blit_wall3(self) -> None:
+        screen.blit(self.wall_BMP, (self.x - self.size // 2, self.y - self.size // 2))
 
 
 class Missile:

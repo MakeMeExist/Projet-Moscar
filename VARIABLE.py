@@ -4,7 +4,7 @@ import os
 import random
 import pygame
 
-from moscar_constant import map_create
+from moscar_constant import map_create2
 from moscar_class import *
 from random import randint
 from time import sleep
@@ -42,7 +42,7 @@ suppr_chercheur = []
 
 # Holds the level layout in a list of strings.
 
-map_create(mape)
+map_create2(mape)
 # Parse the level string above. W = wall, E = exit
 
 running = True
@@ -95,4 +95,6 @@ while running:
     player.blit_hero()
     for i in range(len(missile)):
         missile[i].blit_enemy()
+    for wall in walls:
+        wall.blit_wall3()
     pygame.display.flip()
