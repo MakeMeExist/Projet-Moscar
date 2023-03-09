@@ -9,7 +9,8 @@ from moscar_class import *
 from random import randint
 from time import sleep
 from moscar_constant import *
-
+from math import acos
+from math import sin
 time = 0
 seconde = 0
 min = 0
@@ -77,9 +78,9 @@ while running:
     if seconde // 20 == 1:
         min += 1
         seconde = 0
-    création_chercheur(time, min, chercheur, spawn)
-    création_missile(time, min, missile, spawn, direc)
-    print(min)
+    # création_chercheur(time, min, chercheur, spawn)
+    création_missile2(time, min, missile, spawn, direc)
+    print(len(chercheur))
 
     # ----------------------------------------------------------------------------------------------------------------------------------------
     for e in pygame.event.get():
@@ -91,7 +92,7 @@ while running:
     process_keyboard()
     # ----------------------------------------------------------------------------------------------------------------------------------------
     for i in range(len(chercheur)):
-        chercheur[i].direction2(player.rect.x, player.rect.y)
+        chercheur[i].direction3(player.rect.x, player.rect.y)
         if player.rect.colliderect(chercheur[i]):
             print("dead")
             raise SystemExit
@@ -99,30 +100,29 @@ while running:
         if chercheur[i].vie > 400:
             suppr_chercheur.append(i)
 
-
     for i in range(len(missile)):
 
-        # direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0]
-        # direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0]
+        # # direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0]
+        # # direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0]
+        # #
+        # #       mode interessant
+        # # for i in range(len(missile)):
+        # #     direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
+        # #     direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
         #
-        #       mode interessant
-        # for i in range(len(missile)):
-        #     direction_move_x = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
-        #     direction_move_y = missile[i].direction(player.rect.x, player.rect.y)[0] / 50
-
-        # je de base
-        # for i in range(len(missile)):
-        direction_move_x = direc[i][0]
-        direction_move_y = direc[i][1]
-        # if missile[i].rect.y == 0:
-        #     direction_move_y = missile[i].y
-        # if missile[i].rect.x == 0:
-        #     direction_move_y = missile[i].x
-        if missile[i].rect.x == 0 or missile[i].rect.x <= 1:
-            direction_move_y, missile[i].rect.x = missile[i].y, missile[i].x
-
-        missile[i].move(direction_move_x, direction_move_y)
-
+        # # je de base
+        # # for i in range(len(missile)):
+        # direction_move_x = direc[i][0]
+        # direction_move_y = direc[i][1]
+        # # if missile[i].rect.y == 0:
+        # #     direction_move_y = missile[i].y
+        # # if missile[i].rect.x == 0:
+        # #     direction_move_y = missile[i].x
+        # if missile[i].rect.x == 0 or missile[i].rect.x <= 1:
+        #     direction_move_y, missile[i].rect.x = missile[i].y, missile[i].x
+        #
+        # missile[i].move(direction_move_x, direction_move_y)
+        missile[i].update_enemy_position()
         # missile[i].move(1,2)
         if player.rect.colliderect(missile[i]):
             print("dead")
@@ -146,7 +146,7 @@ while running:
 
     mis.direction2(player.rect.x, player.rect.y)
     # mis.move(1, 1)
-    print("chercheur", len(chercheur))
+    # print("chercheur", len(chercheur))
     # print("direc", len(direc))
     # ----------------------------------------------------------------------------------------------------------------------------------------
     # if player.rect.colliderect(end_rect):
@@ -154,6 +154,6 @@ while running:
 
     # Draw the scene
     screen.fill((0, 0, 0))
-    draw_cube(walls, spawn, missile,chercheur)
+    draw_cube(walls, spawn, missile, chercheur)
     # pygame.draw.rect(screen, (22, 225, 55), mis)
     pygame.display.flip()

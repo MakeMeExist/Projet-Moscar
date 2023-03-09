@@ -49,11 +49,11 @@ def map_create(map: list):
         x = 0
 
 
-def draw_cube(walls, spawn, missile,chercheur):
+def draw_cube(walls, spawn, missile, chercheur):
+    pygame.draw.rect(screen, (255, 200, 0), player.rect)
     for wall in walls:
         pygame.draw.rect(screen, (255, 255, 255), wall.rect)
     # pygame.draw.rect(screen, (255, 0, 0), end_rect)
-    pygame.draw.rect(screen, (255, 200, 0), player.rect)
 
     for i in range(len(spawn)):
         pygame.draw.rect(screen, (64, 224, 208), spawn[i])
@@ -81,21 +81,47 @@ def création_missile(time, min, missile, spawn, direc):
         for i in range(min + 1):
             av = randint(0, len(spawn) - 1)
             b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
-            new_missile.append(Missile(b, spawn[av].x, spawn[av].y, time))
+
+            new_missile.append(Missile(b, time))
         for i in range(len(new_missile)):
             n = player.rect.x // 100 - new_missile[i].rect.x // 100
             v = player.rect.y // 100 - new_missile[i].rect.y // 100
-            a = [n, v]
+            # a = [n, v]
+            a = new_missile[i].directio(player.rect.x, player.rect.y)
             direc.append(a)
         missile += new_missile
     new_missile = []
 
 
-def création_chercheur(time, min, chercheur, spawn):
-    if time % 600 == 0:
+def création_missile2(time, min, missile, spawn, direc):
+    new_missile = []
+    if time % 60 == 0:
         for i in range(min + 1):
             av = randint(0, len(spawn) - 1)
             b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
-            chercheur.append(Missile(b, spawn[av].x, spawn[av].y, time))
+            new_missile.append(Missile(b, time))
+        for i in range(len(new_missile)):
+            new_missile[i].direction4(player.rect.x, player.rect.y)
+        missile += new_missile
+        new_missile = []
+
+SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
+def création_missile3(time, min, missile, spawn, direc):
+    new_missile = []
+    if time % 60 == 0:
+        for i in range(min + 1):
+            av = randint(0, len(spawn) - 1)
+            b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
+            new_missile.append(Missile2(randint(0, SCREEN_WIDTH),randint(0, SCREEN_HEIGHT), time))
+        for i in range(len(new_missile)):
+            new_missile[i].direction4(player.rect.x, player.rect.y)
+        missile += new_missile
+        new_missile = []
 
 
+def création_chercheur(time, min, chercheur, spawn):
+    if time % 60 == 0:
+        for i in range(min + 1):
+            av = randint(0, len(spawn) - 1)
+            b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)
+            chercheur.append(Missile(b, time))

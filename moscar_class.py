@@ -3,8 +3,13 @@
 import os
 import random
 import pygame
+from random import randint
 from math import sqrt
 from math import ceil
+from math import acos
+from math import cos
+from math import sin
+from math import radians
 
 walls = []
 
@@ -55,24 +60,26 @@ class Wall(object):
 
 
 class Missile:
-    def __init__(self, rec, x_def, y_def, naissance=999999999999):
+    def __init__(self, rec, naissance=0, ENEMY_SPEED=3):
         self.rect = rec
-        self.x = x_def
-        self.y = y_def
         self.depart = naissance
         self.vie = 0
-
+        self.ENEMY_SPEED = ENEMY_SPEED
+        self.enemy_x = None
+        self.enemy_y = None
+        self.enemy_vx = None
+        self.enemy_vy = None
 
     def move(self, dx, dy):
 
         if dx != 0:
             self.move_single_axis(dx, 0)
         else:
-            self.move_single_axis(self.x, 0)
+            self.move_single_axis(self.enemy_vx, 0)
         if dy != 0:
             self.move_single_axis(0, dy)
         else:
-            self.move_single_axis(self.y, 0)
+            self.move_single_axis(self.enemy_vy, 0)
 
     def move_single_axis(self, dx, dy):
 
@@ -84,18 +91,60 @@ class Missile:
         b = self.rect.y
         return [x - a, y - b]
 
+    def directio(self, a, b):
+        x = a - self.rect.x
+        y = b - self.rect.y
+        n = norm(x, y)
+        angle = acos(x / n)
+        vx = cos(angle) * 2
+        vy = sin(angle) * 2
+        if b < self.rect.y:
+            vy = -vy
+        print(vx, vy)
+        return vx, vy
+
     def direction2(self, x, y):
         a = self.rect.x
         b = self.rect.y
-        vx,vy = 1,1
+        vx, vy = 1, 1
         if x < a:
             vx = -vx
-        if y <b:
+        if y < b:
             vy = -vy
-        self.move(vx,vy)
+        self.move(vx, vy)
 
-    # def suppression:
-    #     if
+    def direction3(self, a, b):
+        x = a - self.rect.x
+        y = b - self.rect.y
+        n = norm(x, y)
+        angle = acos(x / n)
+        vx = cos(angle) * 2
+        vy = sin(angle) * 2
+        # if a < self.rect.x:
+        #     vx = -vx
+        if b < self.rect.y:
+            vy = -vy
+        print(vx, vy)
+        self.move(vx, vy)
+
+    def direction4(self, hero_x, hero_y):
+        ex = self.rect.x
+        ey = self.rect.y
+        dx = hero_x - ex
+        dy = hero_y - ey
+        n = norm(dx, dy)
+        if n != 0:
+            dx /= n
+            dy /= n
+        dx *= self.ENEMY_SPEED
+        dy *= self.ENEMY_SPEED
+        # self.move(ex + dx, ey + dy)
+        # self.enemy_x, self.enemy_y, self.enemy_vx, self.enemy_vy = ex, ey, dx, dy
+        self.enemy_vx, self.enemy_vy = dx, dy
+
+    def update_enemy_position(self):
+        self.rect.x, self.rect.y = self.rect.x + self.enemy_vx, self.rect.y + self.enemy_vy
+        # self.move(self.enemy_vx,self.enemy_vy)
 
 
 # def tirs(self,n):
@@ -114,6 +163,38 @@ class Missile:
 #
 #     def generation_missile(self):
 #         self.all_missile.add(Missile())
+class Missile2:
+    def __init__(self, x,y, HER_SPEED=10):
+        self.x = x
+        self.y = y
+        # self.rec = rec
+        self.size = 50
+        self.ENEMY_SPEED = HER_SPEED * 0.8
+        self.enemy_x = None
+        self.enemy_y = None
+        self.enemy_vx = None
+        self.enemy_vy = None
+
+    def direction4(self, her_x, her_y):
+        ex = self.x
+        ey = self.y
+        dx = her_x - ex
+        dy = her_y - ey
+        n = norm(dx, dy)
+        if n != 0:
+            dx /= n
+            dy /= n
+        dx *= self.ENEMY_SPEED
+        dy *= self.ENEMY_SPEED
+        # self.move(ex + dx, ey + dy)
+        self.enemy_x, self.enemy_y, self.enemy_vx, self.enemy_vy = ex, ey, dx, dy
+        # self.enemy_vx, self.enemy_vy = dx, dy
+
+    def update_enemy_position(self):
+        self.enemy_x, self.enemy_y = self.enemy_x + self.enemy_vx, self.enemy_y + self.enemy_vy
+
+    def blit_enemy(self, screen) -> None:
+        pygame.draw.rect(screen, (22, 225, 55), self.rec)
 
 
 class Spawn:
