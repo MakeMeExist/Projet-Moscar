@@ -14,7 +14,7 @@ from math import sin
 
 time = 0
 seconde = 0
-min = 0
+minute = 0
 
 # Initialise pygame
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -53,10 +53,10 @@ while running:
     if time % 60 == 0:
         seconde += 1
     if seconde // 20 == 1:
-        min += 1
+        minute += 1
         seconde = 0
 
-    création_missile3(time, min, missile, spawn, direc)
+    création_missile3(time, minute, missile, spawn, direc)
     print(len(missile))
 
     # ----------------------------------------------------------------------------------------------------------------------------------------

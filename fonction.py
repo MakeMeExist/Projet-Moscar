@@ -67,15 +67,6 @@ def generation_spawn(spawn):
         spawn.append(Spawn(pygame.Rect(32 + 16 * 32, 32 * i + 32, 6, 6), - 1, 1))
 
 
-def my_timer(time):
-    global seconde, min
-    if time % 60 == 0:
-        seconde += 1
-    if seconde // 60 == 1:
-        min += 1
-        seconde = 0
-
-
 def missile_collision(missile, player):
     for i in range(len(missile)):
         missile[i].update_enemy_position()
@@ -99,7 +90,7 @@ def missile_suppression(missile, suppr_missile):
 def laser_suppression(laser, suppr_laser):
     for i in range(len(laser)):
         laser[i].timer += 1
-        if laser[i].timer >= 100:
+        if laser[i].timer >= 100 :
             laser[i].mort()
     for i in range(len(laser)):
         if laser[i].timer >= 140:
@@ -121,9 +112,19 @@ def affichage(player, missile, walls, chercheur, laser):
 def création_laser(time, min, laser, player, tetris):
     new_missile = []
     if time % 300 == 0:
-        a = randint(0, len(tetris)-1)
+        a = randint(0, len(tetris) - 1)
         a = tetris[a]
-
+        a ="L"
         lazer = Laser(a)
         lazer.forme_(player)
         laser.append(lazer)
+
+
+def update_time(t, m, s):
+    t += 1
+    if t % 60 == 0:
+        s += 1
+    if s // 60 == 1:
+        m += 1
+        s = 0
+    return t, m, s

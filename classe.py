@@ -133,6 +133,7 @@ class Laser:
         self.c2 = None
         self.c3 = None
         self.c4 = None
+        self.tour = 1
         self.cube = [self.c1, self.c2, self.c3, self.c4]
         self.timer = 0
         self.color = TURQUOISE
@@ -153,30 +154,46 @@ class Laser:
                 x - s * 0.5, y - s * 0.5)
         elif self.forme == "L":
             c1, c2, c3, c4 = (x, y + s * 0.5), (x, y - s * 0.5), (x + s, y - s * 0.5), \
-                (x + s * 2, y - s * 0.5)
+                             (x + s * 2, y - s * 0.5)
         elif self.forme == "RS":
             c1, c2, c3, c4 = (x, y + s * 0.5), (x, y - s * 0.5), (x + s, y + s * 0.5), \
-                (x - s, y - s * 0.5)
+                             (x - s, y - s * 0.5)
         elif self.forme == "T":
-            c1, c2, c3, c4 = (x + s,  y - s * 0.5), (x - s, y - s * 0.5, y + s * 0.5), (x, y + s * 0.5), (x, y - s * 0.5)
+            c1, c2, c3, c4 = (x + s, y - s * 0.5), (x - s, y - s * 0.5, y + s * 0.5), (x, y + s * 0.5), (x, y - s * 0.5)
         elif self.forme == "RL":
             c1, c2, c3, c4 = (x - s, y - s * 0.5), (x - s * 2, y - s * 0.5), (x, y + s * 0.5), (x, y - s * 0.5),
         elif self.forme == "S":
             c1, c2, c3, c4 = (x, y + s * 0.5), (x, y - s * 0.5), (x + s, y - s * 0.5), \
-                (x - s, y + s * 0.5)
+                             (x - s, y + s * 0.5)
 
         self.c1, self.c2, self.c3, self.c4 = c1, c2, c3, c4
         self.cube = [c1, c2, c3, c4]
 
-    def orientation(self, player: object):
-        self.x = player.x
-        self.y = player.y
+    def rotation(self):
+        if self.tour == 1:
+            for i in range(len(self.cube)):
+                self.cube[i] = (self.cube[i][1], self.cube[i][0])
+            self.tour += 1
+        elif self.tour == 2:
+            for i in range(len(self.cube)):
+                self.cube[i] = (self.cube[i][0], -self.cube[i][1])
+            self.tour += 1
+        elif self.tour == 3:
+            for i in range(len(self.cube)):
+                self.cube[i] = (self.cube[i][1], self.cube[i][0])
+            self.tour += 1
+        elif self.tour == 4:
+            for i in range(len(self.cube)):
+                self.cube[i] = (-self.cube[i][0], self.cube[i][1])
+            self.tour = 1
 
     def apparition(self):
         screen.blit(self.laser_BMP2, (self.c1[0] - self.size // 2, self.c1[1] - self.size // 2))
         screen.blit(self.laser_BMP2, (self.c2[0] - self.size // 2, self.c2[1] - self.size // 2))
         screen.blit(self.laser_BMP2, (self.c3[0] - self.size // 2, self.c3[1] - self.size // 2))
         screen.blit(self.laser_BMP2, (self.c4[0] - self.size // 2, self.c4[1] - self.size // 2))
+        for i in range(len(self.cube)):
+            screen.blit(self.laser_BMP2, (self.cube[i][0] - self.size // 2, self.cube[i][1               ] - self.size // 2))
 
     def mort(self):
         self.laser_BMP2.fill(RED)
@@ -188,3 +205,8 @@ class Laser:
                     and self.cube[i][1] - objet.size <= objet.y < self.cube[i][1] + self.size:
                 return True
         return False
+
+    def pour_rotation(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            self.rotation()

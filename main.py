@@ -24,18 +24,13 @@ map_create2(mape, walls)
 
 running = True
 
+
 while running:
     clock.tick(60)
-    time += 1
-    if time % 60 == 0:
-        seconde += 1
-    if seconde // 60 == 1:
-        min += 1
-        seconde = 0
-    # my_timer(time)
+    time,minute,seconde = update_time(time, minute, seconde)
     # print(min, "min", seconde, "seconde", time, "time")
-    création_laser(time, min, laser, player,tetris)
-    # création_missile3(time, min, missile, spawn)
+    création_laser(time, minute, laser, player, tetris)
+    création_missile3(time, minute, missile, spawn)
 
     print(len(missile))
     # ----------------------------------------------------------------------------------------------------------------------------------------
@@ -53,7 +48,8 @@ while running:
             running = False
 
     player.update_hero_position()
-
+    for i in range(len(laser)):
+        laser[i].pour_rotation()
     # ----------------------------------------------------------------------------------------------------------------------------------------
     missile_collision(missile, player)
     missile_suppression(missile, suppr_missile)

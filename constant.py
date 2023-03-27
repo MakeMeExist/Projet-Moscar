@@ -64,7 +64,8 @@ walls = []
 spawn = []
 laser = []
 suppr_laser = []
-tetris = ["barre","L","S","carre","RS","RL","T"]
+tetris = ["barre", "L", "S", "carre", "RS", "RL", "T"]
+
 
 # ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -76,4 +77,4 @@ def norm(x, y) -> float:
 
 time = 0
 seconde = 0
-min = 0
+minute = 0
