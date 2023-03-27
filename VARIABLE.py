@@ -42,7 +42,7 @@ suppr_chercheur = []
 
 # Holds the level layout in a list of strings.
 
-map_create2(mape)
+map_create2(mape, walls)
 # Parse the level string above. W = wall, E = exit
 
 running = True
@@ -75,7 +75,7 @@ while running:
             print("dead")
             raise SystemExit
         missile[i].vie += 1
-        if missile[i].vie > 600:
+        if missile[i].vie > 400:
             suppr_missile.append(i)
 
     for i in suppr_missile:  # despawn
@@ -95,6 +95,6 @@ while running:
     player.blit_hero()
     for i in range(len(missile)):
         missile[i].blit_enemy()
-    for wall in walls:
-        wall.blit_wall3()
+    for i in range(len(walls)):
+        walls[i].blit_wall3()
     pygame.display.flip()

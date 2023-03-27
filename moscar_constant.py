@@ -10,6 +10,7 @@ player = Hero()
 pygame.display.set_caption("MOSCARLAND")
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 print(screen)
+
 mape = ["",
         "",
         "",
@@ -40,21 +41,21 @@ mape = ["",
         ]
 
 
-def map_create2(map: list):
+def map_create2(map: list,walls:list):
     x = y = 0
     for row in map:
         for col in row:
             if col == "W":
-                Wall3(x, y)
+                walls.append(Wall3(x, y))
             x += 16
         y += 16
         x = 0
 
 
 def draw_cube(walls, spawn, missile, chercheur):
-    pygame.draw.rect(screen, (255, 200, 0), player.rect)
-    for wall in walls:
-        walls[wall].blit_wall3()
+    # pygame.draw.rect(screen, (255, 200, 0), player.rect)
+    # for wall in walls:
+    #     walls[wall].blit_wall3()
         # pygame.draw.rect(screen, (255, 255, 255), wall.rect)
 
     # pygame.draw.rect(screen, (255, 0, 0), end_rect)
@@ -67,16 +68,16 @@ def draw_cube(walls, spawn, missile, chercheur):
         pygame.draw.rect(screen, (255, 23, 55), chercheur[i])
 
 
-def process_keyboard():
-    key = pygame.key.get_pressed()
-    if key[pygame.K_LEFT]:
-        player.move(-3, 0)
-    if key[pygame.K_RIGHT]:
-        player.move(3, 0)
-    if key[pygame.K_UP]:
-        player.move(0, -3)
-    if key[pygame.K_DOWN]:
-        player.move(0, 3)
+# def process_keyboard():
+#     key = pygame.key.get_pressed()
+#     if key[pygame.K_LEFT]:
+#         player.move(-3, 0)
+#     if key[pygame.K_RIGHT]:
+#         player.move(3, 0)
+#     if key[pygame.K_UP]:
+#         player.move(0, -3)
+#     if key[pygame.K_DOWN]:
+#         player.move(0, 3)
 
 
 def création_missile(time, min, missile, spawn, direc):
@@ -111,7 +112,7 @@ def création_missile2(time, min, missile, spawn, direc):
 
 def création_missile3(time, min, missile, spawn, direc):
     new_missile = []
-    if time % 1 == 0:
+    if time % 60 == 0:
         for i in range(min + 1):
             av = randint(0, len(spawn) - 1)
             b = pygame.Rect(spawn[av].rect.x, spawn[av].rect.y, 6, 6)

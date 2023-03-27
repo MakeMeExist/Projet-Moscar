@@ -31,26 +31,101 @@ class Hero:
         self.size = 16
         self.HERO_BMP = pygame.Surface((self.size, self.size))
         self.HERO_BMP.fill(BLUE)
-        self.HERO_SPEED = 10
-        self.x = 1440 // 2
-        self.y = 900 // 2
+        self.HERO_SPEED = 5
+        self.x = 256
+        self.y = 256
+        self.pos_x = True
+        self.pos_m_x = True
+        self.pos_y = True
+        self.pos_m_y = True
 
-    def update_hero_position(self):
-        new_x, new_y = self.x, self.y
-
+    def update_hero_position(self, object=0):
+        # self.collision_mur(object)
+        # new_x, new_y = self.x, self.y
+        #
+        # keys = pygame.key.get_pressed()
+        # if keys[pygame.K_UP] and self.pos_m_y:
+        #     new_y = self.y - self.HERO_SPEED
+        # elif keys[pygame.K_DOWN] and self.pos_y:
+        #     new_y = self.y + self.HERO_SPEED
+        # if keys[pygame.K_LEFT] and self.pos_m_x:
+        #     new_x = self.x - self.HERO_SPEED
+        # elif keys[pygame.K_RIGHT] and self.pos_x:
+        #     new_x = self.x + self.HERO_SPEED
+        # self.x, self.y = new_x, new_y
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
-            new_y = self.y - self.HERO_SPEED
+            self.move(0, -self.HERO_SPEED)
         elif keys[pygame.K_DOWN]:
-            new_y = self.y + self.HERO_SPEED
+            self.move(0, self.HERO_SPEED)
         if keys[pygame.K_LEFT]:
-            new_x = self.x - self.HERO_SPEED
+            self.move(-self.HERO_SPEED, 0)
         elif keys[pygame.K_RIGHT]:
-            new_x = self.x + self.HERO_SPEED
-        self.x, self.y = new_x, new_y
+            self.move(self.HERO_SPEED, 0)
 
     def blit_hero(self) -> None:
         screen.blit(self.HERO_BMP, (self.x - self.size // 2, self.y - self.size // 2))
+
+    def collision(self, objet):
+        if self.x - objet.size <= objet.x < self.x + self.size \
+                and self.y - objet.size <= objet.y < self.y + self.size:
+            return True
+        return False
+
+    # def collision_mur(self, objet):
+    #     self.x += self.HERO_SPEED + 1
+    #     if self.collision(objet):
+    #         self.pos_m_x = False
+    #     else:
+    #         self.pos_y = True
+    #     self.x -= self.HERO_SPEED + 1
+    #
+    #     self.x -= self.HERO_SPEED + 1
+    #     if self.collision(objet):
+    #         self.pos_x = False
+    #     else:
+    #         self.pos_y = True
+    #     self.x += self.HERO_SPEED + 1
+    #
+    #     self.y += self.HERO_SPEED + 1
+    #     if self.collision(objet):
+    #         self.pos_y = False
+    #     else:
+    #         self.pos_y = True
+    #     self.y -= self.HERO_SPEED + 1
+    #
+    #     self.y -= self.HERO_SPEED + 1
+    #     if self.collision(objet):
+    #         self.pos_m_y = False
+    #     else:
+    #         self.pos_m_y = True
+    #     self.y += self.HERO_SPEED + 1
+
+    def move(self, dx, dy):
+
+        # Move each axis separately. Note that this checks for collisions both times.
+        if dx != 0:
+            self.move_single_axis(dx, 0)
+        if dy != 0:
+            self.move_single_axis(0, dy)
+
+    def move_single_axis(self, dx, dy):
+
+        # Move the rect
+        self.x += dx
+        self.y += dy
+
+        # If you collide with a wall, move out based on velocity
+        for wall in walls:
+            if self.collision(wall):
+                if dx > 0:  # Moving right; Hit the left side of the wall
+                    self.x = wall.x - self.size #- self.HERO_SPEED
+                if dx < 0:  # Moving left; Hit the right side of the wall
+                    self.x = wall.x + self.size - self.HERO_SPEED
+                if dy > 0:  # Moving down; Hit the top side of the wall
+                    self.y = wall.y - self.size
+                if dy < 0:  # Moving up; Hit the bottom side of the wall
+                    self.y = wall.y + self.size - self.HERO_SPEED
 
 
 # Class for the orange dude
@@ -93,20 +168,20 @@ class Wall(object):
         self.rect = pygame.Rect(pos[0], pos[1], 6, 6)
 
 
-class Wall3():
+class Wall3:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.size = 6
+        self.size = 10
         self.wall_BMP = pygame.Surface((self.size, self.size))
-        self.wall_BMP.fill(0)
+        self.wall_BMP.fill((255, 255, 255))
 
     def blit_wall3(self) -> None:
         screen.blit(self.wall_BMP, (self.x - self.size // 2, self.y - self.size // 2))
 
 
 class Missile:
-    def __init__(self, rec, naissance=0, ENEMY_SPEED=3):
+    def __init__(self, rec, naissance=0, ENEMY_SPEED=2):
         self.rect = rec
         self.depart = naissance
         self.vie = 0
